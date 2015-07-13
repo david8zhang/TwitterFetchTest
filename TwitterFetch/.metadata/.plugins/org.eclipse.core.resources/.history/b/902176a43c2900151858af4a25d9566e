@@ -1,0 +1,127 @@
+package user_interface;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+import twitter4j.FilterQuery;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusListener;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterBase;
+import twitter4j.TwitterFactory;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
+import twitter4j.conf.ConfigurationBuilder;
+
+
+
+
+public class MainFrame extends JFrame{
+	
+	public static void main(String[]args) throws TwitterException{
+		//User Interface
+	    Scanner user_input = new Scanner(System.in);
+	    String searchHash = user_input.next();
+	    
+	    ConfigurationBuilder cb = new ConfigurationBuilder();
+	    cb.setDebugEnabled(true)
+	            .setOAuthConsumerKey("1kCVhQPWLKa11q9NnvjUmzjYZ")
+	            .setOAuthConsumerSecret("loALjJhpYWhgjNwVrlZRhD2UUAtFEidYkxCIidrcZy5z4FTtmM")
+	            .setOAuthAccessToken("3276463446-1WOX24iuYQ5cWkOR8o8SQsw5f9qhREaIYZDJuHx")
+	            .setOAuthAccessTokenSecret("pyLbj4XDYnKVFp8nT28uRMvLiXN68lFoYYj08uMyNrvEt");
+	    
+/*	    TwitterFactory tf = new TwitterFactory(cb.build());
+	    Twitter twitter = tf.getInstance();*/
+        
+/*        try {
+            Query query = new Query(searchHash);
+            QueryResult result;
+            do {
+                result = twitter.search(query);
+                List<Status> tweets = result.getTweets();
+                for (Status tweet : tweets) {
+                	if(tweets.size() > 10){
+                		break;
+                	}
+                    System.out.println("@" + tweet.getUser().getScreenName() + " - " + tweet.getText());
+                }
+            } while ((query = result.nextQuery()) != null);
+            System.exit(0);
+        } catch (TwitterException te) {
+            te.printStackTrace();
+            System.out.println("Failed to search tweets: " + te.getMessage());
+            System.exit(-1);
+        }
+*/
+	    TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+	    StatusListener listener = new StatusListener(){
+	    	public void onStatus(Status status){
+	    		System.out.println("@"+ status.getUser().getScreenName() + " - " + status.getText());
+	    	}
+
+			public void onException(Exception arg0) {
+				// TODO Auto-generated method stub
+				arg0.printStackTrace();
+				
+			}
+
+			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+				// TODO Auto-generated method stub
+                System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+
+				
+			}
+
+			public void onScrubGeo(long userId, long upToStatusId) {
+				// TODO Auto-generated method stub
+                System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+
+				
+			}
+
+			public void onTrackLimitationNotice(int arg0) {
+				// TODO Auto-generated method stub
+                System.out.println("Got track limitation notice:" + arg0);
+				
+			}
+
+			public void onStallWarning(StallWarning arg0) {
+				// TODO Auto-generated method stub
+                System.out.println("Got stall warning:" + arg0);
+
+				
+			}
+	};
+	FilterQuery fq = new FilterQuery();
+	String keywords[] = {searchHash};
+	fq.track(keywords);
+	twitterStream.addListener(listener);
+	twitterStream.filter(fq);
+
+	
+
+	}
+}

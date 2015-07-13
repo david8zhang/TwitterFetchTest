@@ -1,0 +1,75 @@
+package user_interface;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+import twitter4j.*;
+
+
+public class MainFrame extends JFrame implements ActionListener{
+	
+	private JPanel cardPanel;
+	private JMenu switchUser, removeUser; 
+	
+	public MainFrame(){
+		
+		String title = "Twitter4J Sample GUI";
+		setTitle(title);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		JPanel mainPanel = new JPanel();
+        
+        this.add(mainPanel);
+		
+		JMenu file = new JMenu("File");
+		JMenuItem exit = new JMenuItem("Close");
+		
+		this.setLayout(new GridLayout());
+	    JPanel panel = new JPanel();
+	    JLabel jlabel = new JLabel("This is a label");
+	    jlabel.setFont(new Font("Verdana",1,20));
+	    panel.add(jlabel);
+	    panel.setBorder(new LineBorder(Color.BLACK)); // make it easy to see
+	    this.add(panel, new GridBagConstraints());
+	    this.setSize(400, 400);
+	    this.setLocationRelativeTo(null);
+	
+		
+		JButton b1 = new JButton("Click Me!");
+		b1.addActionListener(this);
+		b1.setPreferredSize(new Dimension(10, 50));
+		b1.setAlignmentY(50);
+		b1.setAlignmentX(-10);
+		mainPanel.add(b1);
+		
+	}
+	
+	
+	public void actionPerformed(ActionEvent e){
+	}
+	
+	public static void main(String[]args){
+		MainFrame frame = new MainFrame();
+
+	    frame.setVisible(true);
+	}
+	
+
+
+}
